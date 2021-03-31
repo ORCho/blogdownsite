@@ -1,0 +1,209 @@
+---
+date: "2016-05-05T21:48:51-07:00"
+---
+
+https://janezhang.ca/posts/ask-jane/
+
+### The recipe of data visualization
+Information is Beautiful
+
+
+How I build up this website with R
+
+Base on the book from here
+https://bookdown.org/yihui/blogdown/software-info.html
+
+1. check the basic information
+```
+sessionInfo()
+
+```
+
+2. Download Blogdown
+```
+install.packages("blogdown")
+
+```
+
+3. Download Hugo with blogdown
+```
+blogdown::install_hugo()
+```
+
+Since I already downloaded before so I can skip this step.
+
+4. I tried to run the new site function in my working project session. But after downloading all the files, I am a little bit worried that it doesn't work. So I start a new working session and redo the process. 
+After new_site() function the console reply with a questiton if you want to start the server. After I type in "y", the website jump into my viewer panel. 
+5. Now I turn to confused and tried some conmmand in console by typing
+
+```
+build_site()
+server_site()
+```
+
+however, it doesn't work!
+So I go back to check my previous command and find that maybe I missed blogdown. 
+
+The correct command should be 
+
+```
+
+blogdown::serve_site #start loading the website
+blogdown::newpost()# add new post
+blogdown::build_site() #which will build up the site. So you will see the public file in the working directory. 
+```
+
+* list.files('.') something like ls in terminal. 
+
+* active realtime update in console. 
+```
+options(blogdown.generator.server = TRUE)
+
+
+* Use Rstudio IDE
+after build up the site with bolgdown command I tried to follow the tutorial to play with the addins in Rstudio. 
+
+But the console reply 
+
+```
+Error in find_config() : 
+  Cannot find the configuration file config.toml | config.yaml of the website
+  
+```
+
+I tried several times but it still failed. so I close and reopen the window, and then it works. 
+
+
+After reading through the globle setting file, I have little understanding of what it shows. So move on to the next charpter and leave it for next time. 
+
+
+## Introduction of R Markdown vs. Markdown
+
+embed R code in markdown file with 
+
+_``` r_ without curly braces. 
+
+* something about Markdown, rmarkdown, * Markdown is rendered to HTML through Balckfriday. 
+* R Markdown is complied with rmarkdown, bookdown and pandoc in .Rmd format. 
+* there is another kind of file name .Rmarkdown which is complied with Hogo instead of Pandoc. 
+
+* About output format
+the blogdown does not need to specify the output format. But for markdown file it needs to put output information. 
+
+by adding following code 
+```
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+```
+this code should be added to the Rmd file for each case. 
+But you can also use it globlly by adding _output.yml file in root directory. 
+
+* working flow
+1. choose a theme carefully because each theme is build with different framework and it would be very hard to migrate from one theme to another. 
+2. build new site with following command
+
+```
+blogdown::new_site(theme = 'user/repo')
+```
+## Learn Hugo and Permalink
+1. learning the hugo options. 
+2. upload blogdown to github and deploy it in the netlify. 
+
+* Problems
+Now I am a little bit confusing with the ways to deply website. 
+
+There are three ways that I have learned to deply personal website with content management system. 
+
+First of all is the github site. 
+This is based on the jekyll to generate website underneath the url with github account name.  
+
+Secondly, I learned to build up a project website with rmarkdown conbinding with github page function. 
+
+Thirdly, I use blogdown conbined with third party site generator hugo and netlify to deploy the website. 
+
+But I am a little bit confused about the relationship between blgdown, rmarkdown, github page, hugo and netlify. So I tried to exploy a little bit about it. And I eventually went to the book R Markdown [the Definite Guide. ](https://bookdown.org/yihui/rmarkdown/websites.html)
+
+Build in Site generator: Rmarkdown
+Third Party Static Site Generator (SSG): Hugo, Jekyll, Hexo
+Deployment: Github page, Netlify, Amazon S3
+
+
+Although Rmarkdown has the built in function to generate site, it is 
+
+A main restriction of this site generator is that it assumes all Rmd documents are under a flat directory (i.e., no pages under subdirectories). It also has fewer features compared to Hugo (e.g., no RSS feeds).
+
+
+There are many tools which could be used to generate site. 
+check this out [Jamstack](https://jamstack.org/generators/)
+
+* But the question come what is a SSG:
+
+The basic concept behind an SSG is pretty simple.ake markup - using things like Markdown or HTML - and data - using JSON, YAML, or TOML - then combine this with templates - using tools like Handlebars, Liquid, or Nunjucks - to generate the pages of a website. This is similar to what happens with any dynamic web programming language like PHP, for example, but the key difference is that this is done at build time rather than on the server in response to each page request.(from Snipcart[](https://snipcart.com/blog/choose-best-static-site-generator))
+
+![](https://cdn.netlify.com/b0cd7be20ba718c92b5da007a109a89122f6791a/7824d/img/blog/ssg-host-flow.png)
+
+
+for Rmarkdown just juse 
+```
+rmarkdown::render_site() #This is a R markdown website
+
+```
+```
+
+* permalink 
+by understanding the basic idea of permalink, I tried to revise my website. 
+
+see the tree structure in the content file
+```
+content
+├── about.md
+├── blog
+│   └── 2021-4-1-hello
+│       ├── index.Rmd
+│       ├── index.html
+│       └── index_files
+│           └── figure-html
+│               └── pressure-1.png
+├── post
+│   ├── 2015-01-01-lorem-ipsum
+│   │   └── index.md
+│   ├── 2016-12-30-hello-markdown
+│   │   └── index.md
+│   ├── 2020-12-01-r-rmarkdown
+│   │   ├── index.Rmd
+│   │   ├── index.html
+│   │   └── index_files
+│   │       └── figure-html
+│   │           └── pie-1.png
+│   └── 2021-03-30-blogposto
+│       ├── images
+│       │   └── 1.png
+│       └── index.md
+└── project
+
+add permalink in the _config.yaml
+
+
+
+permalinks:
+  post: /:year/:month/:day/:slug/
+  blog: /:year/:month/:day/:slug/
+  
+  
+menu:
+main:
+    - name: About
+      url: /about/
+    - name: Project
+      url: /post
+    - name: blog
+      url: /blog
+
+```
+more permalinks variables could be added. 
+
+following the link
+[link](https://gohugo.io/content-management/urls/)

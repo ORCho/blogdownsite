@@ -1,7 +1,11 @@
 ---
-title: ''
+
+title: Lorem Ipsum
+date: "2021-03-30T13:09:13-06:00"
+
+
+---
 author: R package build
-date: '2021-03-31'
 slug: ''
 categories: []
 tags: []
