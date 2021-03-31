@@ -207,3 +207,5 @@ more permalinks variables could be added.
 
 following the link
 [link](https://gohugo.io/content-management/urls/)
+
+
